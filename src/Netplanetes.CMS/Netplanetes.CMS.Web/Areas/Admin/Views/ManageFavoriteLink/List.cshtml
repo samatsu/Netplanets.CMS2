@@ -1,0 +1,83 @@
+﻿@model Netplanetes.CMS.Web.Areas.Admin.Models.EditFavoriteLinkListViewModel
+
+@{
+    ViewBag.Title = "お気に入りリンク管理";
+}
+
+
+<section>
+    <div id="content" class="form-contact">
+        <h3 class="title-form-contact">
+            <span>//</span> @ViewBag.Title
+        </h3>
+
+        @Html.ActionLink("お気に入りリンク作成", "Create", new { controller = "ManageFavoriteLink" }, new { @class = "btn btn-primary", role = "button" })
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-6">
+                    <aside>
+                        <div class="content-title">
+                            <h3 style="border-bottom:2px solid #e5ebef">@Html.ActionLink(item.Text, "Edit", new { id = item.FavoriteLinkID, controller = "ManageFavoriteLink" })</h3>
+                            <div>
+                                <p>@item.Url</p>
+                            </div>
+                        </div>
+                        <div class="content-footer">
+                            <i class="fa fa-link" title="お気に入りリンク"></i>
+                            <div class="pull-right">
+                                <a href='@Url.Action("Edit", "ManageFavoriteLink", new { id = item.FavoriteLinkID})'><span class="fa fa-pencil-square-o"></span>&nbsp;編集</a>
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#deleteFavoriteLinkModal" data-favoritetitle="@item.Text" data-favoriteid="@item.FavoriteLinkID"><span class="fa fa-trash-o"></span>&nbsp;削除</a>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+            }
+        </div>
+
+    </div>
+
+
+    <div class="modal fade" id="deleteFavoriteLinkModal" tabindex="-1" role="dialog" aria-labelledby="deleteFavoriteLinkModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="deleteFavoriteLinkModalLabel">お気に入りの削除</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="message">お気に入りリンクを削除します</p>
+                </div>
+                <div class="modal-footer">
+                    @using (Html.BeginForm("Delete", "ManageFavoriteLink"))
+                    {
+                        @Html.Hidden("favoriteLinkId", "", new { @class = "favoriteId" })
+                        @Html.Hidden("returnUrl", @Request.Url.PathAndQuery)
+                        <button type="submit" class="btn btn-primary">確認</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        head.ready("jquery", function () {
+            (function ($) {
+                var dlg = $('#deleteFavoriteLinkModal');
+                dlg.css('margin-top', ($(window).height() - dlg.height()) / 2);
+                $('#deleteFavoriteLinkModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // イベントをトリガーしたボタン
+                    var favoriteLinkId = button.data('favoriteid') // data-* 属性を取得
+                    var title = button.data('favoritetitle') // data-* 属性を取得
+
+                    var modal = $(this)
+                    modal.find('.modal-body .message').text(title + 'を削除します');
+                    modal.find('.modal-footer input.favoriteId').val(favoriteLinkId);
+                })
+            })(jQuery)
+        });
+    </script>
+</section>
+

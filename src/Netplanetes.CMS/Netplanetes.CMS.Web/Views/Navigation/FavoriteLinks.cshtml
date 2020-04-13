@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Netplanetes.CMS.Web.Models.Shared.GeneralLinkViewModel>
+
+<!-- start:widget archive -->
+<div class="widget-sidebar">
+    <h3 class="title-widget-sidebar">
+        <span class="glyphicon glyphicon-bookmark"></span> お気に入りリンク
+    </h3>
+    <div class="content-widget-sidebar">
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li class="categories">
+                    <a href="@item.Url" target="_blank" title="@item.Text"><h5><i class="glyphicon glyphicon-link"></i>&nbsp;@item.Text <span class="small glyphicon glyphicon-new-window"></span></h5></a>
+                </li>
+            }
+
+        </ul>
+    </div>
+</div>
+<!-- end:archive -->

@@ -1,0 +1,74 @@
+﻿@model Netplanetes.CMS.Web.Areas.Admin.Models.EditCategoryViewModel
+
+@{
+    ViewBag.Title = "カテゴリー編集-" + Model.DisplayTitle;
+    string msg = "更新";
+    if (Model.CategoryID == 0)
+    {
+        msg = "作成";
+    }
+
+}
+
+<article>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary()
+        <div class="form-group">
+            @Html.LabelFor(x => x.CategoryID, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10 ">
+                @Html.TextBoxFor(x => x.CategoryID, new { @class = "form-control", disabled = "disabled" })
+                @*   @Html.Editor(x => x.CategoryID, new { @class = "form-control", disabled = "disabled" })*@
+                @Html.HiddenFor(x => x.CategoryID)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.DisplayTitle, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.DisplayTitle, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.DisplayTitle, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.LID, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10 ">
+                @Html.TextBoxFor(x => x.LID, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.LID, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.ShortDescription, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10 ">
+                @Html.TextBoxFor(x => x.ShortDescription, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(x => x.ShortDescription, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.CssClass, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10 ">
+                @Html.TextBoxFor(x => x.CssClass, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(x => x.CssClass, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Description, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10 ">
+                @Html.TextAreaFor(x => x.Description, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(x => x.Description, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.SortOrder, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10 ">
+                @Html.TextBoxFor(x => x.SortOrder, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(x => x.SortOrder, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" class="btn btn-primary" title="@msg" value="@msg" />
+                <input type="reset" class="btn btn-default" value="リセット" />
+            </div>
+        </div>
+    }
+</article>

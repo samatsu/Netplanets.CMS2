@@ -1,0 +1,67 @@
+﻿@model Netplanetes.CMS.Web.Areas.Admin.Models.EditCommentViewModel
+
+@{
+    ViewBag.Title = "コメント編集";
+    string msg = "修正";
+    if (Model.CommentID == 0)
+    {
+        msg = "作成";
+    }
+    ViewBag.Button = Html.ActionLink("記事にジャンプ", "Archive", new { id = Model.ArticleLID, controller = "Article", area = "" }, new { @class = "btn btn-success btn-lg", role = "button" });
+
+}
+
+<article>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary()
+        <div class="form-group">
+            @Html.LabelFor(x => x.CommentID, new { @class = "control-label  col-sm-2" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.CommentID, new { @class = "form-control", disabled = "disabled" })
+                @Html.HiddenFor(x => x.CommentID)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.AddedDate, new { @class = "control-label  col-sm-2" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.AddedDate, new { @class = "form-control", disabled = "disabled" })
+                @Html.HiddenFor(x => x.AddedDate)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.AddedBy, new { @class = "control-label  col-sm-2" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.AddedBy, new { @class = "form-control", disabled = "disabled" })
+                @Html.HiddenFor(x => x.AddedBy)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.AddedByEmail, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.AddedByEmail, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.AddedByEmail, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.AddedByWeb, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10">
+                @Html.TextBoxFor(x => x.AddedByWeb, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(x => x.AddedByWeb, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Body, new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10">
+                @Html.TextAreaFor(x => x.Body, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(x => x.Body, "", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" class="btn btn-primary" title="@msg" value="@msg" />
+                <input type="reset" class="btn btn-default" value="リセット" />
+            </div>
+        </div>
+    }
+</article>

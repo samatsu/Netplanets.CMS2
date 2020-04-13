@@ -1,0 +1,26 @@
+﻿<div class="widget-sidebar">
+    <h3 class="title-widget-sidebar">
+        <i class="glyphicon glyphicon-cog"></i> 管理
+    </h3>
+
+    <div class="content-widget-sidebar">
+        <ul>
+            <li class="archive">
+                <a href='@Url.Action("List", new { area = "admin", controller = "ManageCategory" })'><h5><i class="glyphicon glyphicon-folder-open"></i> カテゴリー管理</h5></a>
+            </li>
+            <li class="archive">
+                <a href='@Url.Action("List", new { area = "admin", controller = "ManageArticle" })'><h5><i class="glyphicon glyphicon-file"></i> 記事管理</h5></a>
+            </li>
+            <li class="archive">
+                <a href='@Url.Action("List", new { area = "admin", controller = "ManageComment" })'><h5><i class="glyphicon glyphicon-comment"></i> コメント管理</h5></a>
+            </li>
+            <li class="archive">
+                <a href='@Url.Action("List", new { area = "admin", controller = "ManageFavoriteLink" })'><h5><i class="glyphicon glyphicon-share"></i> お気に入り管理</h5></a>
+            </li>
+            <li class="archive">
+                <a href='@Url.Action("List", new { area = "admin", controller = "ManageAccount" })'><h5><i class="glyphicon glyphicon-user"></i> アカウント管理</h5></a>
+            </li>
+        </ul>
+    </div>
+</div>
+

@@ -1,0 +1,12 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "404エラー ページが見つかりません";
+}
+
+@*@section SubHeader{
+        @Html.ActionLink("トップに戻る", "Archives", new { controller = "Article", area = "" }, new { @class = "btn btn-success btn-lg", role = "button" })
+    }*@
+
+<div class="alert alert-danger" role="alert">@Model</div>
+@Html.ActionLink("トップに戻る", "Archives", new { controller = "Article", area = "" }, new { @class = "btn btn-default btn-lg", role = "button" })

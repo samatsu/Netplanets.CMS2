@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Netplanetes.CMS.Web.Models.Shared.ActionLinkViewModel>
+
+
+<ul class="dropdown-menu" role="menu">
+    @foreach (var item in Model)
+    {
+        <li>@Html.ActionLink(item.DisplayTitle, "Archives", new { id = item.LID, controller = "Article" })</li>
+    }
+    <li class="divider"></li>
+    <li><a href='@Url.Action("Archives", "Article")'>最新の記事</a></li>
+</ul>

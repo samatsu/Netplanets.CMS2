@@ -1,0 +1,24 @@
+﻿@model Netplanetes.CMS.Web.Areas.Admin.Models.EditUserViewModel
+
+@{
+    ViewBag.Title = "アカウントの編集";
+}
+<article>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary()
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.UserName, new { @class = "control-label" })
+            @Html.EditorFor(x => x.UserName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Email, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.Email, "", new { @class = "control-label" })
+        </div>
+        @Html.HiddenFor(x => x.ID)
+    <input type="submit" class="btn btn-primary" title="変更" value="変更" />
+    }
+</article>

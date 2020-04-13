@@ -1,0 +1,254 @@
+﻿@using Netplanetes.CMS.Web.Models.Shared;
+@model Netplanetes.CMS.Web.Areas.Admin.Models.EditArticleViewModel
+
+@{
+    ViewBag.Title = "記事編集";
+    string msg = "更新";
+    if (Model.ArticleID == 0)
+    {
+        msg = "作成";
+    }
+    IReadOnlyCollection<ActionLinkViewModel> CategoryList = ViewBag.CategoryList;
+    SelectList list = new SelectList(CategoryList, "ID", "DisplayTItle");
+}
+
+<article>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary()
+        <div class="form-group">
+            @Html.LabelFor(x => x.ArticleID, new { @class = "control-label" })
+            @Html.EditorFor(x => x.ArticleID, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.AddedDate, new { @class = "control-label" })
+            @Html.EditorFor(x => x.AddedDate, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.CategoryID, new { @class = "control-label" })
+            @Html.DropDownListFor(x => x.CategoryID, list, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.CategoryID, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Series, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.Series, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.Series, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.DisplayTitle, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.DisplayTitle, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.DisplayTitle, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.LID, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.LID, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.LID, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Body, new { @class = "control-label" })
+            @Html.TextAreaFor(x => x.Body, new { @data_val = "false", @class = "form-control", style = "display:none;" })
+            @Html.ValidationMessageFor(x => x.Body, "", new { @class = "control-label" })
+
+
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.ReleaseDate, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.ReleaseDate, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.ReleaseDate, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.ExpireDate, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.ExpireDate, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.ExpireDate, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">設定</label>
+            <div class="togglebutton">
+                <label>
+                    @Html.CheckBoxFor(x => x.Approved)
+                    @Html.DisplayNameFor(x => x.Approved)
+                </label>
+            </div>
+            @Html.ValidationMessageFor(x => x.Approved, "", new { @class = "control-label" })
+            <div class="togglebutton">
+                <label>
+                    @Html.CheckBoxFor(x => x.Listed)
+                    @Html.DisplayNameFor(x => x.Listed)
+                </label>
+            </div>
+            @Html.ValidationMessageFor(x => x.Listed, "", new { @class = "control-label" })
+            <div class="togglebutton">
+                <label>
+                    @Html.CheckBoxFor(x => x.CommentsEnabled)
+                    @Html.DisplayNameFor(x => x.CommentsEnabled)
+                </label>
+            </div>
+            @Html.ValidationMessageFor(x => x.CommentsEnabled, "", new { @class = "control-label" })
+            <div class="togglebutton">
+                <label>
+                    @Html.CheckBoxFor(x => x.OnlyForMembers)
+                    @Html.DisplayNameFor(x => x.OnlyForMembers)
+                </label>
+            </div>
+            @Html.ValidationMessageFor(x => x.OnlyForMembers, "", new { @class = "control-label" })
+        </div>
+        <input type="submit" class="btn btn-primary" title="@msg" value="@msg" />
+        <input type="reset" class="btn btn-default" value="リセット" />
+    }
+</article>
+
+<script type="text/javascript">
+    head.ready("jquery", function () {
+        head.load([
+            '@Url.Content("~/vendor/ckeditor/ckeditor.js")',
+            '@Url.Content("~/vendor/ckeditor/adapters/jquery.js")'
+
+        ], function () {
+            (function ($) {
+                CKEDITOR.on('dialogDefinition', function (ev) {
+                    // Take the dialog name and its definition from the event data.
+                    var dialogName = ev.data.name;
+                    var dialogDefinition = ev.data.definition;
+
+                    // Check if the definition is from the dialog window you are interested in (the "Link" dialog window).
+                    if (dialogName == 'image') {
+                        // Get a reference to the "Link Info" tab.
+                        var infoTab = dialogDefinition.getContents('info');
+
+                        // Set the default value for the URL field.
+                        var urlField = infoTab.get('txtHeight');
+                        urlField['default'] = '250';
+                    }
+                });
+                $('textarea#Body').ckeditor({ height: '30em', filebrowserBrowseUrl: '@Url.Content("~/vendor/filemanager/index.html")' });
+            })(jQuery)
+        });
+        head.load([
+            '@Url.Content("~/Scripts/typeahead.bundle.js")',
+
+        ], function () {
+            (function ($) {
+                var substringMatcher = function (strs) {
+                    return function findMatches(q, cb) {
+                        var matches, substringRegex;
+
+
+                        // an array that will be populated with substring matches
+                        matches = [];
+
+
+                        // regex used to determine if a string contains the substring `q`
+                        substrRegex = new RegExp(q, 'i');
+
+
+                        // iterate through the pool of strings and for any string that
+                        // contains the substring `q`, add it to the `matches` array
+                        $.each(strs, function (i, str) {
+                            if (substrRegex.test(str)) {
+                                matches.push(str);
+                            }
+                        });
+
+
+                        cb(matches);
+                    };
+                };
+
+                $.ajax({
+                    method: 'POST',
+                    url: '@Url.Content("~/admin/managearticle/Seriestags")',
+                    cache: false,
+                    datatype: 'json',
+                    success: function (d) {
+                        $('#Series').typeahead({
+                            hint: true,
+                            highlight: true,
+                            minLength: 1
+                        },
+                        {
+                            name: 'Seriestags',
+                            source: substringMatcher(d)
+                        });
+
+                    },
+                    error: function (error) {
+                        console.log(error.status)
+                        console.log(error.statusText)
+                        console.log(error.responseText)
+                    }
+
+                })
+            })(jQuery)
+        });
+    });
+</script>
+<style type="text/css">
+    span.twitter-typeahead {
+  width: 100%;
+}
+
+span.twitter-typeahead .tt-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  text-align: left;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+span.twitter-typeahead .tt-suggestion > p {
+  display: block;
+  padding: 3px 20px;
+  margin-bottom: 0px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+}
+span.twitter-typeahead .tt-suggestion.tt-cursor {
+  color: #ffffff;
+  background-color: #428bca;
+}
+
+span.twitter-typeahead .tt-suggestion{
+    padding:5px;
+}
+
+span.twitter-typeahead .tt-suggestion > p:hover,
+span.twitter-typeahead .tt-suggestion > p:focus {
+  color: #ffffff;
+  text-decoration: none;
+  outline: 0;
+  background-color: #428bca;
+}
+
+/*.form-group span.twitter-typeahead {
+  display: block !important;
+}
+.form-group span.twitter-typeahead .tt-dropdown-menu {
+  top: 32px !important;
+}
+.form-group.form-group span.twitter-typeahead .tt-dropdown-menu {
+  top: 44px !important;
+}
+.form-group.form-group span.twitter-typeahead .tt-dropdown-menu {
+  top: 28px !important;
+}*/
+
+
+
+</style>

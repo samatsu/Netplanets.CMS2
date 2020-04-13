@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    @*<meta http-equiv="X-UA-Compatible" content="IE=edge">*@
+    <meta name="description" content="NetPlanetes V2 - Website on Technical article" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="C#, .NET, Windows, ASP.NET, Azure, Cloud, Web" />
+    <meta name="author" content="netplanetes" />
+    <title>@ViewBag.Title - Netplanetes V2</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href='@Url.Content("~/Content/bootstrap.min.css")'>
+    <link rel="stylesheet" href='@Url.Content("~/Content/font-awesome.min.css")'>
+    <link rel="stylesheet" href='@Url.Content("~/vendor/custom/style.css")'>
+    <link rel="stylesheet" href='@Url.Content("~/vendor/custom/netplanetes.css")'>
+
+    <script src="//ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.6.2.js"></script>
+    <script type="text/javascript" src="~/vendor/headjs/head.load.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript">
+        head.load(
+            { jquery: '@Url.Content("~/Scripts/jquery-2.1.4.min.js")' },
+            { bootstrap: '@Url.Content("~/Scripts/bootstrap.min.js")' },
+            { matchHeight: '@Url.Content("~/vendor/matchheight/jquery.matchHeight.min.js")' },
+            '@Url.Content("~/Scripts/jquery.validate.min.js")',
+            '@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")',
+            '@Url.Content("~/Scripts/jquery.validate.unobtrusive.bootstrap.js")',
+            { knockout: '@Url.Content("~/Scripts/knockout-3.3.0.js")' },
+            { knockout_mapping: '@Url.Content("~/Scripts/knockout.mapping.min.js")' },
+            '@Url.Content("~/Scripts/owl.carousel.js")',
+            { netplanetes: '@Url.Content("~/vendor/custom/netplanetes.js")' }
+        );
+    </script>
+
+    <!-- Header 追加読み取り用 -->
+    @if (IsSectionDefined("Head"))
+    {
+        @RenderSection("Head")
+    }
+</head>
+<body>
+
+    @Html.Action("Header", "Navigation", new { area = "" })
+
+    <!-- start:main -->
+    <div id="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8">
+                    @RenderBody()
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <!-- start:sidebar -->
+                    <div id="sidebar">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            Html.RenderPartial("~/Areas/Admin/Views/Shared/PartialManageLinkPanel.cshtml");
+                        }
+                        else
+                        {
+                            Html.RenderAction("SideAdsense", "Navigation", new { area = "" });
+                        }
+                        <!-- start:widget archive -->
+                        @Html.Action("LatestArticlesLinks", "Navigation", new { area = "" })
+                        <!-- end:widget archive -->
+                        <!-- start:widget categories -->
+                        @Html.Action("CategoriesLinksWithArticleCount", "Navigation", new { area = "" })
+                        <!-- end:widget categories -->
+                        <!-- start:widget favorite link -->
+                        @Html.Action("FavoriteLinks", "Navigation", new { area = "" })
+                        <!-- end:widget favorite link  -->
+
+                    </div>
+                    <!-- end:sidebar -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end:main -->
+
+    @Html.Partial("Footer")
+
+    <script type="text/javascript">
+        head.ready(function () {
+            np.initHeader();
+        });
+    </script>
+
+    <!-- 追加 JS 読み込み用 -->
+    @if (IsSectionDefined("Footer"))
+    {
+        @RenderSection("Footer")
+    }
+    <!-- Google Tag Manager -->
+    <!-- Google Tag Manager -->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-NGXBHH"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+            '//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NGXBHH');</script>
+    <!-- End Google Tag Manager -->
+</body>
+</html>

@@ -1,0 +1,44 @@
+﻿@model Netplanetes.CMS.Web.Models.Account.LoginViewModel
+
+@{
+    ViewBag.Title = "ログイン";
+}
+
+<section>
+    <!-- start:login -->
+    <div id="login-alt">
+        <div class="box-login-alt">
+            @using (Html.BeginForm())
+            {
+                <div class="text-center">
+                    <h3>ログイン</h3>
+                </div>
+                <hr />
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = "アカウント" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "パスワード" })
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(x => x.RememberMe)
+                        @Html.DisplayNameFor(x => x.RememberMe)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-warning btn-block">ログイン</button>
+                </div>
+                @Html.AntiForgeryToken()
+            }
+        </div>
+    </div>
+    <!-- end:login -->
+</section>

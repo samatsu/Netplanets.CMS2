@@ -1,0 +1,66 @@
+﻿@using Netplanetes.CMS.Web.HtmlHelpers
+
+@model Netplanetes.CMS.Web.Models.Content.ArticleSummaryListViewModel
+
+@{
+    if (string.IsNullOrEmpty(Model.CategoryDisplayTitle))
+    {
+        ViewBag.Title = "最新の記事一覧";
+    }
+    else
+    {
+        ViewBag.Title = Model.CategoryDisplayTitle + "の記事一覧";
+    }
+}
+
+<section>
+    <div id="content">
+        <div class="row items-container">
+            @foreach (var item in Model.Articles)
+            {
+                <div class="col-lg-6 item">
+                    <aside>
+                        <div class="content-title">
+                            <h3 style="border-bottom:2px solid #e5ebef;margin-bottom:5px;">@Html.ActionLink(item.DisplayTitle, "Archive", new { id = item.LID, controller = "Article" })</h3>
+                            <div>
+                                @item.Abstract
+                            </div>
+                        </div>
+                        <div class="content-footer">
+                            <i class="@item.CssClass" title="@item.CategoryTitle"></i>
+                            <div class="pull-right">
+                                <i class="fa fa-calendar-o" title="公開日"></i> @item.ReleaseDate.ToShortDateString()
+                                <i class="fa fa-file-powerpoint-o" title="ページビュー"></i>&nbsp;@item.ViewCount
+                                <i class="fa fa-comment-o" title="コメント"></i> @item.CommentCount
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+            }
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Series))
+        {
+            // シリーズタグで一覧表示
+            @Html.PageLinks2(Model.PagingInfo, p => Url.Action("Series", "Article", new { id = Model.Series, page = p }))
+        }
+        else
+        {
+            // カテゴリで一覧表示
+            @Html.PageLinks2(Model.PagingInfo, p => Url.Action("Archives", "Article", new { id = Model.CategoryLID, page = p }))
+        }
+
+
+    </div>
+</section>
+
+<script type="text/javascript">
+    head.ready("matchHeight", function () {
+        (function ($) {
+            $('#content .items-container').each(function () {
+                var c = $(this);
+                $(".content-title", c).matchHeight();
+            });
+        })(jQuery)
+    });
+</script>

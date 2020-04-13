@@ -1,0 +1,47 @@
+﻿@model Netplanetes.CMS.Web.Models.Contact.ContactUsViewModel
+
+@{
+    ViewBag.Title = "コンタクトフォーム";
+}
+
+<!-- start:main contact -->
+<article>
+    <div class="content-contact">
+        <div class="row">
+            <div class="col-lg-12">
+                <p>お問い合わせや御用のある方は、下記フォームにお名前、メールアドレス、件名、メッセージを入力して[送信]ボタンをクリックして 下さい。 </p>
+                <div class="form-contact">
+                    <h3 class="title-form-contact">
+                        <span>//</span> メッセージを送る
+                    </h3>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.ValidationSummary(true, "エラーを修正して下さい.")
+                        <div class="row2">
+                            <div class="form-group col-md-6">
+                                @Html.TextBoxFor(x => x.Name, new { @class = "form-control input-lg", placeholder = "名前" })
+                                @Html.ValidationMessageFor(x => x.Name, "", new { @class = "control-label" })
+                            </div>
+                            <div class="form-group col-md-6">
+                                @Html.TextBoxFor(x => x.Email, new { @class = "form-control input-lg", placeholder = "メールアドレス" })
+                                @Html.ValidationMessageFor(x => x.Email, "", new { @class = "control-label" })
+                           </div>
+                            <div class="form-group col-md-12">
+                                @Html.TextBoxFor(x => x.Subject, new { @class = "form-control input-lg", placeholder = "件名" })
+                                @Html.ValidationMessageFor(x => x.Subject, "", new { @class = "control-label" })
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.TextAreaFor(x => x.Body, new { @class = "form-control", placeholder = "本文", rows = 8 })
+                                @Html.ValidationMessageFor(x => x.Body, "", new { @class = "control-label" })
+                            </div>
+                            <div class="form-group col-md-12">
+                                <button class="btn btn-lg btn-default">送信</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+<!-- end:main contact -->

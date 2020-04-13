@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Netplanetes.CMS.Web.Models.Shared.ActionLinkViewModel>
+
+<div class="widget-sidebar">
+    <h3 class="title-widget-sidebar">
+        <i class="glyphicon glyphicon-star"></i> 最新の記事
+    </h3>
+
+    <div class="content-widget-sidebar">
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li class="archive">
+                    <a href='@Url.Action("Archive", new { id=item.LID, controller= "Article" })'>
+                        <h5><i class="@item.CssClass"></i>&nbsp;@item.DisplayTitle</h5>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+

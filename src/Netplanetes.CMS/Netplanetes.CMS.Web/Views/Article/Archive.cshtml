@@ -1,0 +1,140 @@
+﻿@model Netplanetes.CMS.Web.Models.Content.ArticleViewModel
+
+@{
+    ViewBag.Title = @Model.DisplayTitle;
+}
+
+<!-- start:single content -->
+<article id="main-single-content">
+    <div class="content-single">
+        <h2>@Model.DisplayTitle</h2>
+        <div class="tag small">
+            <p>
+                <span><i class="fa fa-user" title="投稿者"></i> @Model.AddedBy</span>
+                <span><i class="fa fa-calendar-o" title="公開日"></i> @Model.ReleaseDate.ToShortDateString()</span>
+                <span><i class="fa fa-file-powerpoint-o" title="ページビュー"></i> @Model.ViewCount</span>
+                <span><i class="fa fa-star" title="@Model.Votes 人の平均評価"></i> @Model.AverageRating</span>
+
+                @if (!string.IsNullOrEmpty(Model.Series))
+                {
+                    <i class="fa fa-tag" title="シリーズタグ"></i><span>@Html.ActionLink(@Model.Series, "Series", new { id = Model.Series })</span>
+                }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <i class="fa fa-circle" title="編集"></i>
+                    <span><a href='@Url.Action("Edit", "ManageArticle", new { area = "admin", id = @Model.LID, returnUrl = Request.Path })'><i class="fa fa-pencil-square-o" title="編集"></i>編集</a></span>
+                }
+            </p>
+        </div>
+        <div class="hr-single"></div>
+        <section id="article-body">
+            @Html.Raw(Model.Body)
+        </section>
+        <div class="hr-single"></div>
+        @if (Model.CommentsEnabled)
+        {
+        <!-- start:comments -->
+            <div id="comments-list" style="display:none;" data-bind="visible:isloaded">
+                <div class="comment">
+                    <!-- start:comments list -->
+                    <ul class="comments">
+                        <li id="posted-comments" data-bind="foreach:comments">
+                            <!-- ko if: ($index() % 2 ) -->
+                            <img src='@Url.Content("~/img/user/user.png")' class="avatar" alt="匿名">
+                            <!-- /ko  -->
+                            <!-- ko ifnot: ($index() % 2 ) -->
+                            <img src='@Url.Content("~/img/user/user.png")' class="avatar" alt="匿名">
+                            <!-- /ko  -->
+                            <div class="post-comments">
+                                <p class="meta">
+                                    <span data-bind="text:$parent.formatDate(AddedDate)"></span>
+                                    <!-- ko if: AddedByWeb -->
+                                    <a class="list-group-item-heading" data-bind="attr: { href: AddedByWeb, title: AddedByWeb }, text: AddedBy"></a>&nbsp;さんのコメント:
+                                    <!-- /ko -->
+                                    <!-- ko ifnot: AddedByWeb -->
+                                    <span class="list-group-item-heading" data-bind="text: AddedBy"></span>さんのコメント:
+                                    <!-- /ko -->
+                                </p>
+                                <p class="list-group-item-text" data-bind="html:$parent.br(Body)"></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- end:comments list -->
+                <!-- start:form comment -->
+                <div class="form-comment">
+                    <h3>コメントフォーム</h3>
+                    <div class="alert alert-warning" data-bind="visible:hasPostError, text:postErrorMessage" role="alert"></div>
+                    <div class="alert alert-success" data-bind="visible:postCompleted" role="alert">コメントを投稿しました</div>
+                    <form method="post" action="/v1/client/comment" role="form" data-bind="submit: validate, visible:!postCompleted()">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                @Html.TextBoxFor(x => x.CommentForm.AddedBy, new { @class = "form-control input-lg", @data_bind = "value:addedBy", placeholder = "名前(必須)" })
+                                @Html.ValidationMessageFor(x => x.CommentForm.AddedBy, "", new { @class = "control-label" })
+                            </div>
+                            <div class="form-group col-md-4">
+                                @Html.TextBoxFor(x => x.CommentForm.AddedByEmail, new { @class = "form-control data-val-email input-lg", @data_bind = "value:addedByEmail", placeholder = "メール" })
+                                @Html.ValidationMessageFor(x => x.CommentForm.AddedByEmail, "", new { @class = "control-label" })
+                            </div>
+                            <div class="form-group col-md-4">
+                                @Html.TextBoxFor(x => x.CommentForm.AddedByWeb, new { @class = "form-control data-val-email input-lg", @data_bind = "value:addedByWeb", placeholder = "URL" })
+                                @Html.ValidationMessageFor(x => x.CommentForm.AddedByWeb, "", new { @class = "control-label" })
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.TextAreaFor(x => x.CommentForm.Body, new { @class = "form-control", @data_bind = "value:body", @rows = 5, placeholder = "コメント(必須)" })
+                                @Html.ValidationMessageFor(x => x.CommentForm.Body, "", new { @class = "control-label" })
+                            </div>
+                            <div class="form-group col-md-12">
+                                <input type="submit" data-bind="css: { disabled: postCompleted }" class="btn btn-lg btn-default btn-block" value="コメント送信" />
+                                <div class="help-block">入力したメールアドレスはサイトには表示されません</div>
+                            </div>
+                            @Html.HiddenFor(x => x.ArticleID, new { @data_bind = "value:articleId" })
+                        </div>
+                    </form>
+                </div>
+                <!-- end:form comment -->
+            </div>
+        <!-- end:comments -->
+
+        }
+    </div>
+</article>
+<!-- end:single content -->
+@section Head{
+    <script type="text/javascript">
+        head.load([
+        '@Url.Content("~/Content/magnific-popup.css")',
+        '@Url.Content("~/Scripts/jquery.magnific-popup.js")'
+        ]);
+    </script>
+}
+
+@section Footer{
+    <!-- HeadJS の非同期ロードだと動作が不安定なので、同期読み込み　-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/tomorrow-night-blue.min.css ">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script type="text/javascript">
+        // default initialization
+        // hljs.initHighlightingOnLoad();
+    </script>
+
+
+    <script type="text/javascript">
+        head.ready(function () {
+            np.loadComment('@Url.Content("~/v1/client/comments/")', '@Model.ArticleID', "#comments-list", '@Url.Content("~/v1/client/comment/")');
+            $('#article-body img').each(function () {
+                var img = $(this);
+                img.css('height', '').addClass('img-responsive').wrap('<a></a>').parent().attr('href', img.attr('src')).magnificPopup({
+                    type: 'image'
+                });
+                ;
+            });
+            $('#article-body table').each(function () {
+                $(this).addClass("table table-hover table-striped").wrap("<div></div>").parent().addClass("table-responsive");
+            });
+            $('#article-body pre').each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
+        })
+    </script>
+}

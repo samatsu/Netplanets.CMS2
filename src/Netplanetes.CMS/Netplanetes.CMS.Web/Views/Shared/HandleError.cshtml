@@ -1,0 +1,8 @@
+﻿@model HandleErrorInfo
+
+@{
+    ViewBag.Title = "要求の処理中にエラーが発生しました";
+}
+
+<div class="alert alert-danger" role="alert">処理中にエラーが発生しました。処理をやり直してください。</div>
+@Html.ActionLink("トップに戻る", "Archives", new { controller = "Article", area = "" }, new { @class = "btn btn-default btn-lg", role = "button" })

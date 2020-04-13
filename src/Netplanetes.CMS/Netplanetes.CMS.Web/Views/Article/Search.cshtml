@@ -1,0 +1,53 @@
+﻿@using Netplanetes.CMS.Web.HtmlHelpers
+
+@model Netplanetes.CMS.Web.Models.Search.SearchResultViewModel
+
+@{
+    ViewBag.Title = "サイト内検索";
+}
+
+<section>
+
+    <div id="content" class="form-contact">
+        @if (!string.IsNullOrEmpty(Model.Query))
+        {
+            <h3 class="title-form-contact">
+                <span>//</span> "@Model.Query" の検索結果
+            </h3>
+        }
+        else
+        {
+            <h3 class="title-form-contact">
+                <span>//</span> 検索ボックスで検索してください
+            </h3>
+        }
+        <div class="row">
+            @foreach (var item in Model.Articles)
+            {
+                <div class="col-xs-12">
+                    <aside>
+                        <div class="content-title">
+                            <h3 style="border-bottom:2px solid #e5ebef">@Html.ActionLink(item.DisplayTitle, "Archive", new { id = item.LID, controller = "Article" })</h3>
+                            <div>
+                                @Html.Raw(@item.Abstract)
+                            </div>
+                        </div>
+                        <div class="content-footer">
+                            <i class="glyphicon glyphicon-th" title="@item.CategoryTitle"></i> @item.CategoryTitle
+                            <div class="pull-right">
+                                <i class="fa fa-calendar-o" title="公開日"></i> @item.ReleaseDate.ToShortDateString()
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+            }
+        </div>
+        @Html.PageLinks2(Model.PagingInfo, p => Url.Action("Search", "Article", new { q = Model.Query, page = p }))
+    </div>
+</section>
+
+
+
+
+

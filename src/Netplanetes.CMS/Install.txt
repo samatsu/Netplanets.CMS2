@@ -1,0 +1,38 @@
+﻿IIS Manager に環境をセットアップするメモ
+
+コンフィグの設定
+
+1. Netplanetes.CMS.Webのコンフィグ設定
+- Web.config の appSettings を編集
+    <add key="SearchServiceName" value="[Azure Search Serviceの名前]" />
+    <add key="SearchServiceApiKey" value="[APIキー]" />
+    <add key="SearchIndexName" value="Azure Searchのインデックス名" />
+    <add key="NetPlanetes_MailTo" value="メールアドレス" />
+	<add key="np:MasterName" value="[初期ユーザーのアカウント名]" />
+    <add key="np:MasterEmail" value="[初期ユーザーのメールアドレス]" />
+    <add key="np:MasterPassword" value="[初期ユーザーのパスワード]" />
+
+- Web.config の connectionStrings の編集(Release)
+  DBを作成する権限が必要。作成後は権限を低くできる。
+
+- Web.config の system.net のSMTPサーバーの設定
+
+2. CKEditorで使用するアップロードパスの変更
+vendor\filemanager\scripts\filemanager.config
+	var fileRoot = '/memo2/UserMedia/';
+　　作成したUserMediaフォルダーに対してアプリケーションプールのユーザーに修正権限を付与
+　　ApplicationPoolIdentityユーザーでアプリケーションプールを実行している場合は　IIS AppPool\DefaultAppPool　などになります。
+
+3. CKEditorで相対パスを使用する設定
+vendor\ckeditor\config.js
+	config.baseHref = 'http://localhost/memo2/'
+
+4. Netplanetes.CMS.UpdateSearchIndex の Web.configの変更
+  Azure Searchへの接続設定を環境に合わせて変更する
+  <appSettings>
+    <add key="SearchServiceName" value="[Azure Serch Service Name]" />
+    <add key="SearchServiceApiKey" value="[API Key]" />
+    <add key="SearchIndexName" value="[Index Name]" />
+  </appSettings>
+
+

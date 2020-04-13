@@ -1,0 +1,34 @@
+﻿@model Netplanetes.CMS.Web.Areas.Admin.Models.CreateUserViewModel
+
+@{
+    ViewBag.Title = "アカウントの作成";
+}
+
+<article>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary()
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.UserName , new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Email, new { @class = "control-label" })
+            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.Email, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Password, new { @class = "control-label" })
+            @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.Password, "", new { @class = "control-label" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.PasswordConfirm, new { @class = "control-label" })
+            @Html.PasswordFor(x => x.PasswordConfirm, new { @data_val = "false", @class = "form-control" })
+            @Html.ValidationMessageFor(x => x.PasswordConfirm, "", new { @class = "control-label" })
+        </div>
+        <input type="submit" class="btn btn-primary" title="作成" value="作成" />
+    }
+</article>

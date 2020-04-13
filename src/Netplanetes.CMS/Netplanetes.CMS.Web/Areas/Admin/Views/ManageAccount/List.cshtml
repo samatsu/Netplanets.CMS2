@@ -1,0 +1,86 @@
+﻿@using Netplanetes.CMS.Web.Areas.Admin.Models
+@model  IEnumerable<EditUserViewModel> 
+
+@{
+    ViewBag.Title = "ユーザー管理";
+}
+
+
+<section>
+    <div id="content" class="form-contact">
+        <h3 class="title-form-contact">
+            <span>//</span> @ViewBag.Title
+        </h3>
+
+        @Html.ActionLink("ユーザーを作成", "Create", new { controller = "ManageAccount" }, new { @class = "btn btn-primary", role = "button" })
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-6">
+                    <aside>
+                        <div class="content-title">
+                            <h3 style="border-bottom:2px solid #e5ebef">@Html.ActionLink(item.UserName, "Edit", new { id = item.ID, controller = "ManageAccount" })</h3>
+                            <div>
+                                <p>@item.Email</p>
+                            </div>
+                        </div>
+                        <div class="content-footer">
+                            <i class="fa fa-user" title="アカウント"></i>
+                            <div class="pull-right">
+                                <a href='@Url.Action("Edit", "ManageAccount", new { id = item.ID })'><i class="fa fa-pencil-square-o" title="編集"></i>&nbsp;編集</a>
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#deleteUserModal" data-username="@item.UserName" data-userid="@item.ID"><i class="fa fa-trash-o" title="削除"></i>&nbsp;削除</a>
+                                <a href='@Url.Action("ChangePassword", "ManageAccount", new { id = item.ID})'><i class="fa fa-lock" title="パスワード変更"></i>&nbsp;パスワード変更</a>
+
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+            }
+        </div>
+
+    </div>
+
+
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="deleteUserModalLabel">アカウントの削除</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="message">アカウントを削除します</p>
+                </div>
+                <div class="modal-footer">
+                    @using (Html.BeginForm("Delete", "ManageAccount"))
+                    {
+                        @Html.Hidden("id", "", new { @class = "userid" })
+                        @Html.Hidden("returnUrl", @Request.Url.PathAndQuery)
+                        <button type="submit" class="btn btn-primary">確認</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        head.ready("jquery", function () {
+            (function ($) {
+                var dlg = $('#deleteUserModal');
+                dlg.css('margin-top', ($(window).height() - dlg.height()) / 2);
+                $('#deleteUserModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // イベントをトリガーしたボタン
+                    var username = button.data('username') // data-* 属性を取得
+                    var userid = button.data('userid') // data-* 属性を取得
+
+                    var modal = $(this)
+                    modal.find('.modal-body .message').text(username + 'を削除します');
+                    modal.find('.modal-footer input.userid').val(userid);
+                })
+            })(jQuery)
+        });
+    </script>
+
+</section>

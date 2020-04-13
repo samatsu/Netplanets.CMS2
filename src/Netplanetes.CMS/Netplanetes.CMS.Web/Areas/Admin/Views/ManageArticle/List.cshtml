@@ -1,0 +1,125 @@
+﻿@using Netplanetes.CMS.Web.HtmlHelpers
+
+@model Netplanetes.CMS.Web.Models.Content.ArticleSummaryListViewModel
+
+@{
+    ViewBag.Title = "記事管理";
+}
+
+
+<section>
+
+    <div id="content" class="form-contact">
+        <h3 class="title-form-contact">
+            <span>//</span> @ViewBag.Title
+        </h3>
+        @Html.ActionLink("記事を作成", "Create", new { area = "admin" }, new { @class = "btn btn-primary", role = "button" })
+        <div class="row">
+            @foreach (var item in Model.Articles)
+            {
+                <div class="col-xs-12">
+                    <aside>
+                        <div class="content-title">
+                            <h3 style="border-bottom:2px solid #e5ebef">@Html.ActionLink(item.DisplayTitle, "Edit", new { id = item.LID, controller = "ManageArticle" })</h3>
+                            <div>
+                                @item.Abstract
+                            </div>
+                        </div>
+                        <div class="content-footer">
+                            <i class="@item.CssClass" title="@item.CategoryTitle"></i>
+                            <div class="pull-right">
+                                <i class="fa fa-calendar-o" title="公開日"></i> @item.ReleaseDate.ToShortDateString()
+                                <i class="fa fa-file-powerpoint-o" title="ページビュー"></i>&nbsp;@item.ViewCount
+                                <i class="fa fa-comment-o" title="コメント"></i> @item.CommentCount
+                                <a href='@Url.Action("Edit", "ManageArticle", new { id = item.LID, returnUrl = Request.Path })'><i class="fa fa-pencil-square-o" title="変更"></i>&nbsp;編集</a>
+                                @if (!item.Approved)
+                                {
+                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#approveArticleModal" data-articletitle="@item.DisplayTitle" data-articlelinktitle="@item.LID"><i class="fa fa-check-square-o"></i>&nbsp;承認</a>
+                                }
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#deleteArticleModal" data-articletitle="@item.DisplayTitle" data-articlelinktitle="@item.LID"><i class="fa fa-trash-o"></i>&nbsp;削除</a>
+                                <a href='@Url.Action("Archive", "Article", new { id = item.LID, area = "" })' title="記事を表示"><span class="fa fa-file-text-o"></span>&nbsp;記事に移動</a>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+            }
+        </div>
+        @Html.PageLinks2(Model.PagingInfo, p => Url.Action("List", "ManageArticle", new { id = Model.CategoryLID, page = p }))
+
+
+    </div>
+
+    <div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="deleteArticleModalLabel">記事の削除</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="message">記事を削除します</p>
+                </div>
+                <div class="modal-footer">
+                    @using (Html.BeginForm("Delete", "ManageArticle"))
+                    {
+                        @Html.Hidden("articleid", "", new { @class = "article-marker" })
+                        @Html.Hidden("returnUrl", @Request.Url.PathAndQuery)
+                        <button type="submit" class="btn btn-primary">確認</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="approveArticleModal" tabindex="-1" role="dialog" aria-labelledby="approveArticleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="approveArticleModalLabel">記事の承認</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="message">記事を承認します</p>
+                </div>
+                <div class="modal-footer">
+                    @using (Html.BeginForm("Approve", "ManageArticle"))
+                    {
+                        @Html.Hidden("id", "", new { @class = "article-marker" })
+                        @Html.Hidden("returnUrl", @Request.Url.PathAndQuery)
+                        <button type="submit" class="btn btn-primary">確認</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        head.ready("jquery", function () {
+            (function ($) {
+                var dlg = $('#deleteArticleModal');
+                $('#deleteArticleModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget);              // イベントをトリガーしたボタン
+                    var title = button.data('articletitle');         // data-* 属性を取得
+                    var linkTitle = button.data('articlelinktitle'); // data-* 属性を取得
+
+                    var modal = $(this);
+                    modal.find('.modal-body .message').text(title + 'を削除します');
+                    modal.find('.modal-footer input.article-marker').val(linkTitle);
+                });
+                $('#approveArticleModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget);              // イベントをトリガーしたボタン
+                    var title = button.data('articletitle');         // data-* 属性を取得
+                    var linkTitle = button.data('articlelinktitle'); // data-* 属性を取得
+
+                    var modal = $(this);
+                    modal.find('.modal-body .message').text(title + 'を承認します');
+                    modal.find('.modal-footer input.article-marker').val(linkTitle);
+                });
+            })(jQuery)
+        });
+    </script>
+
+</section>

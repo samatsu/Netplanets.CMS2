@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Netplanetes.CMS.Web.Models.Shared.ActionLinkViewModel>
+
+<!-- start:header -->
+<div id="header">
+    <div class="overlay">
+        <!-- start:header-top -->
+        <div class="header-top">
+            <div class="container">
+                <div class="sosmed-header-top">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href='@Url.Action("Login", "Account", new { returnUrl= Request.Url.PathAndQuery })'><i class="fa fa-sign-in" data-toggle="tooltip" data-placement="bottom" title="サインイン"></i></a>
+                    }
+                    else
+                    {
+                        <a href='@Url.Action("Logout", "Account", new { returnUrl = Request.Url.PathAndQuery })'><i class="fa fa-sign-out" data-toggle="tooltip" data-placement="bottom" title="サインアウト"></i></a>
+                    }
+                    <a href='@Url.Action("List", "ManageCategory", new { area = "admin"})'><i class="fa fa-cog" data-toggle="tooltip" data-placement="bottom" title="管理"></i></a>
+                    <a href='@Url.Action("Rss20", "Feed", new { area = "" })' class="" title="RSS2.0"><i class="fa fa-rss" data-toggle="tooltip" data-placement="bottom" title="RSS 2.0"></i></a>
+                    <a href='@Url.Action("Atom10", "Feed", new { area = "" })' class="" title="ATOM1.0"><i class="fa fa-rss-square" data-toggle="tooltip" data-placement="bottom" title="ATOM"></i></a>
+                    <a href='@Url.Action("SiteMap", "Feed", new { area = "" })' class="" title="SITEMAP"><i class="fa fa-sitemap" data-toggle="tooltip" data-placement="bottom" title="Sitemap"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- end:header-top -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3">
+                    <div class="text-center">
+                        <div class="title-header">
+                            <h1>
+                                <span>//</span> Net planet-es V2
+                            </h1>
+                            <p>技術的な備忘録,ツールを公開しています.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end:header -->
+<!-- start:navbar -->
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-menu">
+                <span class="sr-only">toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href='@Url.Action("Archives", "Article", new {  area = "" })'><span class="sr-only">home</span><strong><i class="fa fa-windows"></i></strong></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-collapse-menu">
+            <ul class="nav navbar-nav">
+                <li class="dropdown ">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="sr-only">category</span>カテゴリ<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        @foreach (var c in Model)
+                        {
+                            <li><a href='@Url.Action("Archives", "Article", new { id = c.LID})'><i class="@c.CssClass"></i> @c.DisplayTitle</a></li>
+                        }
+                    </ul>
+                </li>
+                <li><a href='@Url.Action("SendMail", "Contact")'><span class="sr-only">contact</span>コンタクト</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 管理<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li><a href='@Url.Action("Login", "Account", new { returnUrl = Request.Url.PathAndQuery })'><span class="sr-only">log in</span>ログイン</a></li>
+                        }
+                        else
+                        {
+                            <li><a href='@Url.Action("Logout", "Account", new { returnUrl = Request.Url.PathAndQuery })'><span class="sr-only">log out</span>ログアウト</a></li>
+                        }
+                        <li>
+                            <a href='@Url.Action("List", "ManageCategory", new { area = "admin"})'><span class="sr-only">manage site</span>サイト管理</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            @using (Html.BeginForm("Search", "Article", FormMethod.Get, new { @class = "navbar-form navbar-right" , role = "search" }))
+            {
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="サイト内検索" name="q" value='@Request.QueryString["q"]'>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Go!</button>
+                    </span>
+                </div>
+            }
+        </div><!-- /.navbar-collapse -->
+    </div>
+</nav>
+<!-- end:navbar -->
